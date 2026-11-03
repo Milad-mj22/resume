@@ -1,0 +1,12 @@
+{% extends "portfolio/base.html" %}
+{% block title %}{{ post.title }} — {{ c.name }}{% endblock %}
+{% block desc %}{{ post.excerpt }}{% endblock %}
+{% block content %}
+<main class="page narrow">
+  <a href="{% url 'portfolio:blog' lang=lang %}" class="back">{{ c.ui.back_blog }}</a>
+  <time class="eyebrow" datetime="{{ post.date|date:'Y-m-d' }}">{{ post.date|date:"j F Y" }}</time>
+  <h1 class="display">{{ post.title }}</h1>
+  {% if post.image %}<div class="cover glass"><img src="{{ post.image }}" alt=""></div>{% endif %}
+  <article class="prose">{{ post.body|linebreaks }}</article>
+</main>
+{% endblock %}

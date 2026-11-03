@@ -1,0 +1,13 @@
+{% extends "portfolio/base.html" %}
+{% block title %}{{ c.ui.blog }} — {{ c.name }}{% endblock %}
+{% block desc %}{{ c.ui.blog_text }}{% endblock %}
+{% block content %}
+<main class="page">
+  <p class="eyebrow">{{ c.ui.blog_eyebrow }}</p>
+  <h1 class="display">{{ c.ui.blog_title }}</h1>
+  <p class="lead page-lead muted">{{ c.ui.blog_text }}</p>
+  {% if posts %}
+  <div class="posts">{% for post in posts %}{% include "portfolio/_post_card.html" %}{% endfor %}</div>
+  {% else %}<p class="muted empty">{{ c.ui.blog_empty }}</p>{% endif %}
+</main>
+{% endblock %}

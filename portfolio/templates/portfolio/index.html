@@ -1,0 +1,164 @@
+{% extends "portfolio/base.html" %}
+{% load static %}
+{% block content %}
+
+<!-- ============ BACKGROUND STAGE (تصویر پس‌زمینه که با اسکرول عوض می‌شود) ============ -->
+<div class="bg-stage" aria-hidden="true">
+  <div class="bg-layer" data-key="hero"    data-pos="center" style="--o:1">
+    <img src="{% static 'portfolio/img/profile.png' %}" alt="" decoding="async"></div>
+  <div class="bg-layer" data-key="about"   data-pos="end"    style="--o:.6">
+    <img src="{% static 'portfolio/img/bg-about.png' %}" alt="" decoding="async"></div>
+  <div class="bg-layer" data-key="work"    data-pos="center" style="--o:.28">
+    <img src="{% static 'portfolio/img/bg-work.png' %}" alt="" decoding="async"></div>
+  <div class="bg-layer" data-key="reviews" data-pos="start"  style="--o:.45">
+    <img src="{% static 'portfolio/img/bg-reviews.png' %}" alt="" decoding="async"></div>
+  <div class="bg-layer" data-key="contact" data-pos="end"    style="--o:.55">
+    <img src="{% static 'portfolio/img/bg-contact.png' %}" alt="" decoding="async"></div>
+</div>
+
+<main id="top">
+
+<!-- ============ HERO ============ -->
+<section class="hero" data-bg="hero">
+  <p class="eyebrow tl">{{ c.hero.eyebrow }}</p>
+  <img class="hero-mark" src="{% static 'portfolio/img/logo.svg' %}" alt="" width="22" height="22">
+
+  <div class="portrait">
+    <div class="ring r1"></div><div class="ring r2"></div>
+  </div>
+
+  <div class="hero-grid">
+    <h1 class="hero-title">
+      <small>{{ c.hero.hey }}</small>
+      <span class="ghost" data-text="{{ c.hero.line1 }}">{{ c.hero.line1 }}</span>
+      <span class="solid">{{ c.hero.line2 }}</span>
+    </h1>
+    <div class="hero-side">
+      <p>{{ c.hero.text }}</p>
+      <a href="#work" class="ulink">{{ c.hero.link }}
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 9 9 3M4 3h5v5"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <div class="stats">
+    {% for num, label in c.stats %}
+    <article class="stat glass">
+      <header><span>{{ forloop.counter }} / {{ c.stats|length }}</span>
+        <img src="{% static 'portfolio/img/logo.svg' %}" alt="" width="16" height="16"></header>
+      <strong class="count" data-to="{{ num }}">{{ num }}<sup>+</sup></strong>
+      <hr><p>{{ label }}</p>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section class="section about" id="about" data-bg="about">
+  <p class="eyebrow">{{ c.about.eyebrow }}</p>
+  <div class="about-grid">
+    <h2 class="display">{{ c.about.title_a }}<br><em>{{ c.about.title_b }}</em></h2>
+    <div class="about-text">
+      <p class="lead">{{ c.about.lead }}</p>
+      <p class="muted">{{ c.about.text }}</p>
+      <a href="#contact" class="pill-btn small orange"><span>{{ c.about.cta }}</span>
+        <i class="pill-ico light"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#ff5a2c" stroke-width="1.8" stroke-linecap="round"><path d="M3 9 9 3M4 3h5v5"/></svg></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SKILLS ============ -->
+<section class="section" id="skills" data-bg="about">
+  <h2 class="h2">{{ c.skills_title }}</h2>
+  <div class="skills">
+    {% for name, level in c.skills %}
+    <div class="skill glass">
+      <div class="skill-head"><span>{{ name }}</span><b>{{ level }}%</b></div>
+      <div class="bar"><i style="--w:{{ level }}%"></i></div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- ============ WORK ============ -->
+<section class="section" id="work" data-bg="work">
+  <p class="eyebrow">{{ c.work.eyebrow }}</p>
+  <h2 class="h2">{{ c.work.title }}</h2>
+  <div class="projects">
+    {% for p in projects %}
+    <article class="project glass">
+      <a class="shot s{{ p.shade }}" href="{{ p.url }}" aria-label="{{ p.title }}">
+        {% if p.image %}<img src="{{ p.image }}" alt="" loading="lazy">{% else %}<span>{{ p.title|slice:":1" }}</span>{% endif %}
+      </a>
+      <div class="project-body">
+        <h3><a href="{{ p.url }}">{{ p.title }}</a></h3>
+        <small class="kind">{{ p.kind }}</small>
+        <p>{{ p.desc }}</p>
+        <p class="did"><b>{{ c.work.label }}</b> {{ p.did }}</p>
+        <ul class="tags">{% for t in p.tags %}<li>{{ t }}</li>{% endfor %}</ul>
+        <a href="{{ p.url }}" class="ulink">{{ c.ui.overview }}
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 9 9 3M4 3h5v5"/></svg></a>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- ============ REVIEWS ============ -->
+<section class="section" id="reviews" data-bg="reviews">
+  <p class="eyebrow">{{ c.reviews.eyebrow }}</p>
+  <h2 class="display center">{{ c.reviews.title }}</h2>
+  <div class="reviews">
+    {% for r in c.reviews.items %}
+    <figure class="review glass {% if forloop.first %}featured{% endif %}">
+      <blockquote>{{ r.text }}</blockquote>
+      <figcaption>
+        <span class="avatar">{{ r.name|slice:":1" }}</span>
+        <span><b>{{ r.name }}</b><small>{{ r.role }}</small></span>
+      </figcaption>
+    </figure>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- ============ BLOG ============ -->
+{% if posts %}
+<section class="section" id="blog" data-bg="reviews">
+  <p class="eyebrow">{{ c.ui.blog_eyebrow }}</p>
+  <h2 class="h2">{{ c.ui.latest }}</h2>
+  <div class="posts">{% for post in posts %}{% include "portfolio/_post_card.html" %}{% endfor %}</div>
+  <a href="{% url 'portfolio:blog' lang=lang %}" class="ulink all">{{ c.ui.all_posts }}</a>
+</section>
+{% endif %}
+
+<!-- ============ CONTACT ============ -->
+<section class="section contact" id="contact" data-bg="contact">
+  <div class="contact-head">
+    <p class="eyebrow">{{ c.contact.eyebrow }}</p>
+    <h2 class="display">{{ c.contact.title }}</h2>
+    <p class="muted">{{ c.contact.text }}</p>
+  </div>
+
+  <form class="form glass" id="contactForm" method="post" action="{% url 'portfolio:contact' %}" novalidate
+        data-sending="{{ c.contact.sending }}" data-success="{{ c.contact.success }}" data-error="{{ c.contact.error }}">
+    {% csrf_token %}
+    <label><span>{{ c.contact.name }} *</span><input name="name" required autocomplete="name"></label>
+    <label><span>{{ c.contact.phone }}</span><input name="phone" type="tel" autocomplete="tel"></label>
+    <label><span>{{ c.contact.email }} *</span><input name="email" type="email" required autocomplete="email"></label>
+    <label><span>{{ c.contact.project }}</span>
+      <select name="project_type">
+        {% for o in c.contact.project_options %}<option>{{ o }}</option>{% endfor %}
+      </select>
+    </label>
+    <label class="full"><span>{{ c.contact.message }} *</span><textarea name="message" rows="4" required></textarea></label>
+    <div class="form-foot full">
+      <p class="form-msg" id="formMsg" role="status"></p>
+      <button class="pill-btn orange" type="submit"><span>{{ c.contact.submit }}</span></button>
+    </div>
+  </form>
+</section>
+
+</main>
+
+
+{% endblock %}

@@ -1,0 +1,57 @@
+{% load static %}{% url 'portfolio:home' lang=lang as home_url %}<!doctype html>
+<html lang="{{ lang }}" dir="{{ dir }}" data-lang="{{ lang }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ c.title }}{% endblock %}</title>
+  <meta name="description" content="{% block desc %}{{ c.hero.text }}{% endblock %}">
+  <meta name="theme-color" content="#0b0506">
+  <link rel="icon" href="{% static 'portfolio/img/logo.svg' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Vazirmatn:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'portfolio/css/style.css' %}">
+</head>
+<body>
+  <div class="bg-glow" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <a href="{{ home_url }}" class="brand">
+      <img src="{% static 'portfolio/img/logo.svg' %}" alt="" width="26" height="26">
+      <span>{{ c.brand }}</span>
+    </a>
+
+    <nav class="nav-links" id="navLinks" aria-label="Main">
+      {% for id, label in c.nav %}<a href="{{ home_url }}#{{ id }}">{{ label }}</a>{% endfor %}
+      <a href="{% url 'portfolio:blog' lang=lang %}">{{ c.ui.blog }}</a>
+    </nav>
+
+    <div class="nav-actions">
+      <div class="lang" id="lang">
+        <button class="lang-btn" type="button" aria-haspopup="true" aria-expanded="false">
+          <span class="flag">{{ c.flag }}</span><span>{{ c.lang_label }}</span>
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m2 3.5 3 3 3-3"/></svg>
+        </button>
+        <ul class="lang-menu">
+          <li><a href="{{ url_en }}">🇺🇸 English</a></li>
+          <li><a href="{{ url_fa }}">🇮🇷 فارسی</a></li>
+        </ul>
+      </div>
+      <a href="{{ home_url }}#contact" class="pill-btn">
+        <span>{{ c.cta }}</span>
+        <i class="pill-ico"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><path d="M3 9 9 3M4 3h5v5"/></svg></i>
+      </a>
+      <button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
+    </div>
+  </header>
+
+  {% block content %}{% endblock %}
+
+  <footer class="footer">
+    <img src="{% static 'portfolio/img/logo.svg' %}" alt="" width="18" height="18">
+    <span>{{ c.footer }}</span>
+  </footer>
+
+  <script src="{% static 'portfolio/js/main.js' %}" defer></script>
+</body>
+</html>

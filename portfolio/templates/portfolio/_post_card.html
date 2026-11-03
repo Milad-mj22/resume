@@ -1,0 +1,11 @@
+<article class="post glass">
+  <a class="post-cover" href="{{ post.url }}" aria-hidden="true" tabindex="-1">
+    {% if post.image %}<img src="{{ post.image }}" alt="" loading="lazy">{% else %}<span>{{ post.title|slice:":1" }}</span>{% endif %}
+  </a>
+  <div class="post-body">
+    <time datetime="{{ post.date|date:'Y-m-d' }}">{{ post.date|date:"j M Y" }}</time>
+    <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
+    <p>{{ post.excerpt }}</p>
+    <a href="{{ post.url }}" class="ulink">{{ c.ui.read_more }}</a>
+  </div>
+</article>

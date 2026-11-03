@@ -1,0 +1,38 @@
+{% extends "portfolio/base.html" %}
+{% block title %}{{ p.title }} — {{ c.name }}{% endblock %}
+{% block desc %}{{ p.desc }}{% endblock %}
+{% block content %}
+<main class="page">
+  <a href="{% url 'portfolio:home' lang=lang %}#work" class="back">{{ c.ui.back_work }}</a>
+  <p class="eyebrow">{{ p.kind }}</p>
+  <h1 class="display">{{ p.title }}</h1>
+  <p class="lead page-lead">{{ p.desc }}</p>
+
+  <div class="cover glass">
+    {% if p.image %}<img src="{{ p.image }}" alt="{{ p.title }}">{% else %}<span class="cover-ph">{{ p.title|slice:":1" }}</span>{% endif %}
+  </div>
+
+  <div class="detail-grid">
+    <aside class="glass meta">
+      <h2>{{ c.work.label }}</h2>
+      <p>{{ p.did }}</p>
+      <ul class="tags">{% for t in p.tags %}<li>{{ t }}</li>{% endfor %}</ul>
+      {% if p.link %}<a href="{{ p.link }}" target="_blank" rel="noopener" class="pill-btn small orange"><span>{{ c.ui.visit }}</span>
+        <i class="pill-ico light"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#ff5a2c" stroke-width="1.8" stroke-linecap="round"><path d="M3 9 9 3M4 3h5v5"/></svg></i></a>{% endif %}
+    </aside>
+    <article class="prose">{{ p.body|linebreaks }}</article>
+  </div>
+
+  {% if others %}
+  <h2 class="h2 more">{{ c.ui.more_work }}</h2>
+  <div class="projects two">
+    {% for p in others %}
+    <article class="project glass">
+      <a class="shot s{{ p.shade }}" href="{{ p.url }}" aria-label="{{ p.title }}">{% if p.image %}<img src="{{ p.image }}" alt="" loading="lazy">{% else %}<span>{{ p.title|slice:":1" }}</span>{% endif %}</a>
+      <div class="project-body"><h3><a href="{{ p.url }}">{{ p.title }}</a></h3><small class="kind">{{ p.kind }}</small><p>{{ p.desc }}</p></div>
+    </article>
+    {% endfor %}
+  </div>
+  {% endif %}
+</main>
+{% endblock %}
