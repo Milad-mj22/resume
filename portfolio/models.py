@@ -109,3 +109,21 @@ class ProjectImage(models.Model):
 
     def __str__(self):
         return f"تصویر برای {self.project.title_en} ({self.id})"
+
+
+
+
+class SiteSettings(models.Model):
+    phone = models.CharField("شماره تماس", max_length=40, blank=True)
+    email = models.EmailField("ایمیل", blank=True)
+    linkedin = models.URLField("لینک لینکدین", blank=True)
+    instagram = models.URLField("لینک اینستاگرام", blank=True)
+    github = models.URLField("لینک گیت‌هاب", blank=True)
+    telegram = models.URLField("لینک تلگرام", blank=True)
+
+    class Meta:
+        verbose_name = "تنظیمات سایت"
+        verbose_name_plural = "تنظیمات سایت"
+
+    def __str__(self):
+        return "تنظیمات کلی سایت"

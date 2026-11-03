@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import ContactMessage, Post, Project
+from .models import ContactMessage, Post, Project, SiteSettings
 
 from django.contrib import admin
 from .models import Project, ProjectImage
@@ -44,3 +44,10 @@ class PostAdmin(admin.ModelAdmin):
 
 
 
+
+
+@admin.register(SiteSettings)
+class SiteSettingsAdmin(admin.ModelAdmin):
+    def has_add_permission(self, request):
+        # جلوگیری از ساخت بیش از یک رکورد تنظیمات
+        return not SiteSettings.objects.exists()

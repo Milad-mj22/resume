@@ -5,7 +5,7 @@ from django.views.decorators.http import require_POST
 
 from .content import CONTENT, DEFAULT_LANG
 from .forms import ContactForm
-from .models import Post, Project
+from .models import Post, Project, SiteSettings  # SiteSettings به اینجا منتقل شد
 
 
 def _lang(lang):
@@ -17,10 +17,17 @@ def _lang(lang):
 def _ctx(request, lang, url_name, **kw):
     """کانتکست مشترک؛ url_en / url_fa برای دکمه تغییر زبان در همان صفحه."""
     request.session["lang"] = lang
+    
+    # دریافت تنظیمات سایت از دیتابیس
+    settings_obj = SiteSettings.objects.first()
+    if not settings_obj:
+        settings_obj = SiteSettings()
+
     return {
         "c": CONTENT[lang],
         "lang": lang,
         "dir": "rtl" if lang == "fa" else "ltr",
+        "site_settings": settings_obj,  # <-- اضافه شد
         "url_en": reverse(url_name, kwargs={**kw.get("kwargs", {}), "lang": "en"}),
         "url_fa": reverse(url_name, kwargs={**kw.get("kwargs", {}), "lang": "fa"}),
         **{k: v for k, v in kw.items() if k != "kwargs"},
@@ -28,7 +35,6 @@ def _ctx(request, lang, url_name, **kw):
 
 
 def _project_card(p, lang, i=0):
-
     main_image = p.image.url if p.image else None
     
     # گرفتن لیست همه عکس‌های گالری
@@ -43,18 +49,16 @@ def _project_card(p, lang, i=0):
     if not main_image and gallery_images:
         main_image = gallery_images[0]["url"]
 
-
     return {
         "title": p.tr("title", lang),
         "kind": p.tr("kind", lang),
         "desc": p.tr("desc", lang),
-        "image": p.image.url if p.image else None,
         "did": p.tr("did", lang),
         "tags": p.tag_list(lang),
         "url": reverse("portfolio:project", args=[lang, p.slug]),
         "link": p.link,
         "image": main_image,
-        "gallery": gallery_images,  # <--- لیست عکس‌ها اضافه شد
+        "gallery": gallery_images,
         "shade": i % 3 + 1,
     }
 
@@ -88,7 +92,6 @@ def project_detail(request, lang, slug):
     others = [_project_card(o, lang, i) for i, o in
               enumerate(Project.objects.filter(published=True).exclude(pk=p.pk)[:2])]
     
-    # ساخت لیست عکس‌های گالری برای این پروژه
     gallery_images = [
         {
             "url": img.image.url,
@@ -101,7 +104,7 @@ def project_detail(request, lang, slug):
                p={
                    **_project_card(p, lang), 
                    "body": p.tr("body", lang) or p.tr("desc", lang),
-                   "gallery": gallery_images  # <--- این خط اضافه شد
+                   "gallery": gallery_images
                },
                others=others)
     return render(request, "portfolio/project_detail.html", ctx)
@@ -131,13 +134,9 @@ def contact(request):
     return JsonResponse({"ok": False, "errors": form.errors}, status=400)
 
 
-
-
 def projects_list(request, lang):
     lang = _lang(lang)
-    # گرفتن همه پروژه‌های منتشر شده
     all_projects = Project.objects.filter(published=True)
     projects = [_project_card(p, lang, i) for i, p in enumerate(all_projects)]
-    
     return render(request, "portfolio/projects_list.html", 
                   _ctx(request, lang, "portfolio:projects_list", projects=projects))
