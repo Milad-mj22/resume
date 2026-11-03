@@ -1,6 +1,14 @@
 from django.contrib import admin
 from .models import ContactMessage, Post, Project
 
+from django.contrib import admin
+from .models import Project, ProjectImage
+
+# ⬇️ این کلاس را اضافه کنید ⬇️
+class ProjectImageInline(admin.TabularInline):
+    model = ProjectImage
+    extra = 1  # تعداد فیلدهای خالی که برای آپلود عکس جدید نشان داده می‌شود
+
 
 @admin.register(ContactMessage)
 class ContactMessageAdmin(admin.ModelAdmin):
@@ -13,6 +21,7 @@ class ContactMessageAdmin(admin.ModelAdmin):
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ("title_en", "title_fa", "order", "published")
+    inlines = [ProjectImageInline]
     list_editable = ("order", "published")
     prepopulated_fields = {"slug": ("title_en",)}
     fieldsets = (
@@ -32,3 +41,6 @@ class PostAdmin(admin.ModelAdmin):
         ("English", {"fields": ("title_en", "excerpt_en", "body_en")}),
         ("فارسی", {"fields": ("title_fa", "excerpt_fa", "body_fa")}),
     )
+
+
+

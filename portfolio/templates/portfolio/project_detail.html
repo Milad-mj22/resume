@@ -8,9 +8,31 @@
   <h1 class="display">{{ p.title }}</h1>
   <p class="lead page-lead">{{ p.desc }}</p>
 
-  <div class="cover glass">
-    {% if p.image %}<img src="{{ p.image }}" alt="{{ p.title }}">{% else %}<span class="cover-ph">{{ p.title|slice:":1" }}</span>{% endif %}
+  <!-- ============ بخش گالری تصاویر ============ -->
+  <div class="project-gallery-container" style="margin-bottom: 2rem;">
+    <div class="cover glass">
+      {% if p.image %}
+        <img id="main-gallery-image" src="{{ p.image }}" alt="{{ p.title }}">
+      {% else %}
+        <span class="cover-ph">{{ p.title|slice:":1" }}</span>
+      {% endif %}
+    </div>
+    
+    {% if p.gallery %}
+    <div class="gallery-thumbnails" style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; justify-content: center;">
+      <!-- اگر تصویر اصلی هم جزو گالری نبود، آن را به عنوان اولین ریزعکس قرار می‌دهیم -->
+      {% if p.image %}
+        <img src="{{ p.image }}" alt="Cover" class="thumb-img active" onclick="changeMainImage(this)" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; cursor: pointer; opacity: 1; border: 2px solid #ff6b00;">
+      {% endif %}
+
+      {% for img in p.gallery %}
+        <img src="{{ img.url }}" alt="{{ img.alt }}" class="thumb-img" onclick="changeMainImage(this)" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; cursor: pointer; opacity: 0.6; border: 2px solid transparent; transition: all 0.3s;">
+      {% endfor %}
+    </div>
+    {% endif %}
   </div>
+  <!-- ============ پایان بخش گالری ============ -->
+
 
   <div class="detail-grid">
     <aside class="glass meta">
@@ -18,7 +40,7 @@
       <p>{{ p.did }}</p>
       <ul class="tags">{% for t in p.tags %}<li>{{ t }}</li>{% endfor %}</ul>
       {% if p.link %}<a href="{{ p.link }}" target="_blank" rel="noopener" class="pill-btn small orange"><span>{{ c.ui.visit }}</span>
-        <i class="pill-ico light"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#ff5a2c" stroke-width="1.8" stroke-linecap="round"><path d="M3 9 9 3M4 3h5v5"/></svg></i></a>{% endif %}
+        <i class="pill-ico light"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 9 9 3M4 3h5v5"/></svg></i></a>{% endif %}
     </aside>
     <article class="prose">{{ p.body|linebreaks }}</article>
   </div>
@@ -35,4 +57,26 @@
   </div>
   {% endif %}
 </main>
+
+<!-- ============ اسکریپت تغییر عکس اصلی با کلیک روی ریزعکس‌ها ============ -->
+<script>
+function changeMainImage(thumbnail) {
+    // 1. تغییر تصویر اصلی
+    const mainImage = document.getElementById('main-gallery-image');
+    if (mainImage) {
+        mainImage.src = thumbnail.src;
+    }
+
+    // 2. حذف افکت فعال از همه ریزعکس‌ها
+    const allThumbs = document.querySelectorAll('.thumb-img');
+    allThumbs.forEach(thumb => {
+        thumb.style.opacity = '0.6';
+        thumb.style.border = '2px solid transparent';
+    });
+
+    // 3. اعمال افکت فعال به ریزعکس کلیک شده
+    thumbnail.style.opacity = '1';
+    thumbnail.style.border = '2px solid #ff6b00'; // رنگ نارنجی سایت شما (تغییر دهید اگر لازم است)
+}
+</script>
 {% endblock %}

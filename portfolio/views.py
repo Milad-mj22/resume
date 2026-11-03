@@ -28,15 +28,33 @@ def _ctx(request, lang, url_name, **kw):
 
 
 def _project_card(p, lang, i=0):
+
+    main_image = p.image.url if p.image else None
+    
+    # گرفتن لیست همه عکس‌های گالری
+    gallery_images = []
+    for img in p.images.all():
+        gallery_images.append({
+            "url": img.image.url,
+            "alt": img.alt_text_fa if lang == "fa" else img.alt_text_en
+        })
+    
+    # اگر عکس کاور خالی بود، اولین عکس گالری را کاور کن
+    if not main_image and gallery_images:
+        main_image = gallery_images[0]["url"]
+
+
     return {
         "title": p.tr("title", lang),
         "kind": p.tr("kind", lang),
         "desc": p.tr("desc", lang),
+        "image": p.image.url if p.image else None,
         "did": p.tr("did", lang),
         "tags": p.tag_list(lang),
-        "image": p.image.url if p.image else "",
         "url": reverse("portfolio:project", args=[lang, p.slug]),
         "link": p.link,
+        "image": main_image,
+        "gallery": gallery_images,  # <--- لیست عکس‌ها اضافه شد
         "shade": i % 3 + 1,
     }
 
@@ -69,8 +87,22 @@ def project_detail(request, lang, slug):
     p = get_object_or_404(Project, slug=slug, published=True)
     others = [_project_card(o, lang, i) for i, o in
               enumerate(Project.objects.filter(published=True).exclude(pk=p.pk)[:2])]
+    
+    # ساخت لیست عکس‌های گالری برای این پروژه
+    gallery_images = [
+        {
+            "url": img.image.url,
+            "alt": img.alt_text_fa if lang == "fa" else img.alt_text_en
+        }
+        for img in p.images.all()
+    ]
+
     ctx = _ctx(request, lang, "portfolio:project", kwargs={"slug": slug},
-               p={**_project_card(p, lang), "body": p.tr("body", lang) or p.tr("desc", lang)},
+               p={
+                   **_project_card(p, lang), 
+                   "body": p.tr("body", lang) or p.tr("desc", lang),
+                   "gallery": gallery_images  # <--- این خط اضافه شد
+               },
                others=others)
     return render(request, "portfolio/project_detail.html", ctx)
 
@@ -97,3 +129,15 @@ def contact(request):
         form.save()
         return JsonResponse({"ok": True})
     return JsonResponse({"ok": False, "errors": form.errors}, status=400)
+
+
+
+
+def projects_list(request, lang):
+    lang = _lang(lang)
+    # گرفتن همه پروژه‌های منتشر شده
+    all_projects = Project.objects.filter(published=True)
+    projects = [_project_card(p, lang, i) for i, p in enumerate(all_projects)]
+    
+    return render(request, "portfolio/projects_list.html", 
+                  _ctx(request, lang, "portfolio:projects_list", projects=projects))

@@ -53,7 +53,6 @@
   $$(".skills").forEach(el => barObs.observe(el));
 
 
-
   /* ---------- Scroll-driven background (crossfade between layers) ---------- */
   const layers = $$(".bg-layer"), secs = $$("[data-bg]");
   if (layers.length && secs.length) {
@@ -85,19 +84,15 @@
     pick();
   }
 
-
-
-  /* ---------- Portrait parallax + cursor glow (desktop) ---------- */
+  /* ---------- Background parallax + cursor glow (desktop) ---------- */
   if (!reduce && matchMedia("(hover:hover)").matches) {
     const cur = document.createElement("div"); cur.className = "cursor"; document.body.appendChild(cur);
     const imgs = $$(".bg-layer img");
     addEventListener("mousemove", e => {
       cur.classList.add("on");
       cur.style.left = e.clientX + "px"; cur.style.top = e.clientY + "px";
-      if (img) {
       const x = (e.clientX / innerWidth - .5) * 14, y = (e.clientY / innerHeight - .5) * 8;
       imgs.forEach(im => im.style.transform = `translate(${x}px,${y}px)`);
-      }
     });
     $$("a,button,input,select,textarea").forEach(el => {
       el.addEventListener("mouseenter", () => cur.classList.add("big"));
@@ -128,4 +123,17 @@
       msg.className = "form-msg err"; msg.textContent = form.dataset.error;
     } finally { btn.textContent = label; }
   });
+
+  /* ---------- Sync favicon & browser theme-color with the CSS theme ---------- */
+  const resolve = prop => {                       // تبدیل متغیر CSS به رنگ نهایی (rgb)
+    const t = document.createElement("i");
+    t.style.cssText = `position:absolute;visibility:hidden;color:var(${prop})`;
+    document.body.appendChild(t);
+    const v = getComputedStyle(t).color; t.remove(); return v;
+  };
+  const accent = resolve("--accent"), bgc = resolve("--bg");
+  const metaTheme = $('meta[name="theme-color"]'); if (metaTheme) metaTheme.content = bgc;
+  const icon = $('link[rel="icon"]');
+  if (icon) icon.href = "data:image/svg+xml," + encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" stroke="${accent}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4 4 27h6l6-12 6 12h6L16 4Z"/><path d="M12.5 21h7"/></svg>`);
 })();

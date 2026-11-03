@@ -1,5 +1,5 @@
 {% load static %}{% url 'portfolio:home' lang=lang as home_url %}<!doctype html>
-<html lang="{{ lang }}" dir="{{ dir }}" data-lang="{{ lang }}">
+<html lang="{{ lang }}" dir="{{ dir }}" data-lang="{{ lang }}" data-theme="{{ theme }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,7 +17,7 @@
 
   <header class="nav" id="nav">
     <a href="{{ home_url }}" class="brand">
-      <img src="{% static 'portfolio/img/logo.svg' %}" alt="" width="26" height="26">
+      {% include "portfolio/_logo.html" with s=26 %}
       <span>{{ c.brand }}</span>
     </a>
 
@@ -39,7 +39,7 @@
       </div>
       <a href="{{ home_url }}#contact" class="pill-btn">
         <span>{{ c.cta }}</span>
-        <i class="pill-ico"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><path d="M3 9 9 3M4 3h5v5"/></svg></i>
+        <i class="pill-ico"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 9 9 3M4 3h5v5"/></svg></i>
       </a>
       <button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
     </div>
@@ -48,7 +48,7 @@
   {% block content %}{% endblock %}
 
   <footer class="footer">
-    <img src="{% static 'portfolio/img/logo.svg' %}" alt="" width="18" height="18">
+    {% include "portfolio/_logo.html" with s=18 %}
     <span>{{ c.footer }}</span>
   </footer>
 

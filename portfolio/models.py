@@ -83,3 +83,29 @@ class Post(Bilingual):
 
     def __str__(self):
         return self.title_en
+
+
+
+
+
+
+# ⬇️ این کلاس را به انتهای فایل اضافه کنید ⬇️
+class ProjectImage(models.Model):
+    project = models.ForeignKey(
+        Project, 
+        related_name="images", 
+        on_delete=models.CASCADE, 
+        verbose_name="پروژه"
+    )
+    image = models.ImageField("تصویر", upload_to="projects/gallery/")
+    alt_text_fa = models.CharField("متن جایگزین (فارسی)", max_length=200, blank=True)
+    alt_text_en = models.CharField("متن جایگزین (انگلیسی)", max_length=200, blank=True)
+    order = models.PositiveIntegerField("ترتیب", default=0)
+
+    class Meta:
+        ordering = ["order", "id"]
+        verbose_name = "تصویر پروژه"
+        verbose_name_plural = "تصاویر پروژه"
+
+    def __str__(self):
+        return f"تصویر برای {self.project.title_en} ({self.id})"

@@ -1,0 +1,32 @@
+{% extends "portfolio/base.html" %}
+{% load static %}
+{% block content %}
+<main class="page" style="padding-top: 120px;">
+  <p class="eyebrow">{{ c.work.eyebrow }}</p>
+  <h1 class="display" style="margin-bottom: 2rem;">{{ c.ui.all_projects|default:"همه پروژه‌ها" }}</h1>
+
+  <div class="projects">
+    {% for p in projects %}
+    <article class="project glass">
+      <a class="shot s{{ p.shade }}" href="{{ p.url }}" aria-label="{{ p.title }}">
+        {% if p.image %}
+            <img src="{{ p.image }}" alt="" loading="lazy">
+        {% else %}
+            <span>{{ p.title|slice:":1" }}</span>
+        {% endif %}
+      </a>
+      <div class="project-body">
+        <h3><a href="{{ p.url }}">{{ p.title }}</a></h3>
+        <small class="kind">{{ p.kind }}</small>
+        <p>{{ p.desc }}</p>
+        <p class="did"><b>{{ c.work.label }}</b> {{ p.did }}</p>
+        <ul class="tags">{% for t in p.tags %}<li>{{ t }}</li>{% endfor %}</ul>
+        <a href="{{ p.url }}" class="ulink" style="margin-top: 15px; display: inline-block;">{{ c.ui.overview }}
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 9 9 3M4 3h5v5"/></svg>
+        </a>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+</main>
+{% endblock %}
