@@ -354,3 +354,77 @@ ul{list-style:none}
 .exp-link svg{flex:none;transition:transform .2s}
 .exp-link:hover svg{transform:translate(2px,-2px)}
 [dir="rtl"] .exp-link:hover svg{transform:translate(-2px,-2px)}
+
+
+
+/* ===== Certificates & Awards ===== */
+.certs{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:18px;
+}
+.cert{
+  overflow:hidden;display:flex;flex-direction:column;
+  transition:transform .3s,border-color .3s;
+}
+.cert:hover{
+  transform:translateY(-4px);
+  border-color:color-mix(in srgb,var(--accent) 45%,transparent);
+}
+.cert-img{
+  aspect-ratio:4/3;overflow:hidden;
+  background:radial-gradient(80% 90% at 30% 20%,
+    color-mix(in srgb,var(--accent) 20%,var(--bg)),
+    var(--bg-deep));
+  display:grid;place-items:center;
+}
+.cert-img img{width:100%;height:100%;object-fit:cover}
+.cert-body{padding:18px 20px;display:flex;flex-direction:column;gap:8px;flex:1}
+.cert h3{font-size:1.1rem;font-weight:600;line-height:1.4}
+.cert-meta{font-size:.82rem;color:var(--accent);font-weight:500}
+.cert-date{color:var(--muted);font-weight:400}
+.cert-desc{font-size:.85rem;color:var(--muted);line-height:1.7}
+.cert-link{margin-top:auto;align-self:flex-start;font-size:.82rem}
+
+@media (max-width:620px){
+  .certs{grid-template-columns:1fr}
+}
+
+.certs{grid-template-columns:repeat(2,1fr) !important;}
+.cert{page-break-inside:avoid;break-inside:avoid;}
+
+
+/* ===== PDF top toolbar ===== */
+.pdf-toolbar{
+  display:none;
+}
+.pdf-mode .pdf-toolbar{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding:10px 16px;
+  background:hsl(0 0% 100% / .06);
+  border-bottom:1px solid var(--line);
+  font-size:.82rem;
+  color:var(--ink-2);
+  text-align:center;
+  flex-wrap:wrap;
+}
+.pdf-mode .pdf-toolbar a{
+  color:var(--accent);
+  font-weight:600;
+  border-bottom:1px solid color-mix(in srgb,var(--accent) 45%,transparent);
+  transition:.2s;
+}
+.pdf-mode .pdf-toolbar a:hover{
+  color:var(--ink);
+  border-color:var(--ink);
+}
+.pdf-mode .pdf-toolbar svg{vertical-align:middle;margin-inline-end:4px}
+[data-lang="fa"] .pdf-mode .pdf-toolbar{font-size:.9rem}
+
+.pdf-mode .pdf-toolbar{
+  background:color-mix(in srgb,var(--accent) 12%,transparent);
+  border-bottom:1px solid color-mix(in srgb,var(--accent) 35%,transparent);
+}

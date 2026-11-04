@@ -164,3 +164,29 @@ class Experience(Bilingual):
     def tag_list(self, lang):
         raw = self.tr("tags", lang).replace("،", ",")
         return [t.strip() for t in raw.split(",") if t.strip()]
+
+
+
+
+class Certificate(Bilingual):
+    order = models.PositiveIntegerField("ترتیب", default=0, help_text="عدد کمتر = بالاتر")
+    published = models.BooleanField("منتشر شده", default=True)
+    image = models.ImageField("تصویر گواهینامه", upload_to="certificates/", blank=True)
+    link = models.URLField("لینک اعتبارسنجی", blank=True, help_text="مثلاً لینک Credly یا سایت صادرکننده")
+
+    title_en = models.CharField("Title (EN)", max_length=200)
+    title_fa = models.CharField("عنوان (فارسی)", max_length=200, blank=True)
+    issuer_en = models.CharField("Issuer (EN)", max_length=160, help_text="مثلاً: Microsoft / Coursera")
+    issuer_fa = models.CharField("صادرکننده (فارسی)", max_length=160, blank=True)
+    date_en = models.CharField("Date (EN)", max_length=40, help_text="مثلاً: 2024")
+    date_fa = models.CharField("تاریخ (فارسی)", max_length=40, blank=True, help_text="مثلاً: ۱۴۰۳")
+    desc_en = models.TextField("Description (EN)", blank=True)
+    desc_fa = models.TextField("توضیح (فارسی)", blank=True)
+
+    class Meta:
+        ordering = ["order", "id"]
+        verbose_name = "گواهینامه / افتخار"
+        verbose_name_plural = "گواهینامه‌ها و افتخارات"
+
+    def __str__(self):
+        return self.title_en

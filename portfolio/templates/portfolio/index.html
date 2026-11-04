@@ -18,6 +18,27 @@
 </div>
 {% endif %}
 
+
+{% if pdf_mode %}
+<div class="pdf-toolbar" dir="{{ dir }}">
+  {% if lang == "fa" %}
+    برای مشاهده بهتر و نسخه تعاملی، به
+    <a href="https://mykaman.ir" target="_blank" rel="noopener">
+      mykaman.ir
+      <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 9 9 3M4 3h5v5"/></svg>
+    </a>
+    مراجعه کنید.
+  {% else %}
+    For the best experience and the interactive version, visit
+    <a href="https://mykaman.ir" target="_blank" rel="noopener">
+      mykaman.ir
+      <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 9 9 3M4 3h5v5"/></svg>
+    </a>
+  {% endif %}
+</div>
+{% endif %}
+
+
 <main id="top">
 
 <!-- ============ HERO ============ -->
@@ -59,7 +80,7 @@
 
 <!-- ============ ABOUT ============ -->
 <section class="section about" id="about" data-bg="about">
-  {% if pdf_mode %}{% include "portfolio/_pdf_bg.html" with src="portfolio/img/bg-about.png" pos="end" o=".6" %}{% endif %}
+  <!-- {% if pdf_mode %}{% include "portfolio/_pdf_bg.html" with src="portfolio/img/bg-about.png" pos="end" o=".6" %}{% endif %} -->
 
   <p class="eyebrow">{{ c.about.eyebrow }}</p>
   <div class="about-grid">
@@ -72,6 +93,40 @@
     </div>
   </div>
 </section>
+
+
+<!-- ============ CERTIFICATES & AWARDS ============ -->
+{% if certificates %}
+<section class="section" id="certificates" data-bg="about">
+  <p class="eyebrow">{{ c.certificates.eyebrow }}</p>
+  <h2 class="h2">{{ c.certificates.title }}</h2>
+  <div class="certs">
+    {% for cert in certificates %}
+    <article class="cert glass">
+      {% if cert.image %}
+      <div class="cert-img">
+        <img src="{{ cert.image }}" alt="{{ cert.title }}" loading="lazy">
+      </div>
+      {% endif %}
+      <div class="cert-body">
+        <h3>{{ cert.title }}</h3>
+        <p class="cert-meta">
+          {{ cert.issuer }}
+          {% if cert.date %}<span class="cert-date">· {{ cert.date }}</span>{% endif %}
+        </p>
+        {% if cert.desc %}<p class="cert-desc">{{ cert.desc }}</p>{% endif %}
+        {% if cert.link %}
+        <a href="{{ cert.link }}" target="_blank" rel="noopener" class="ulink cert-link">
+          {% if lang == "fa" %}مشاهده اعتبار{% else %}Verify{% endif %}
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 9 9 3M4 3h5v5"/></svg>
+        </a>
+        {% endif %}
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
 
 
 <!-- ============ EXPERIENCE ============ -->
@@ -117,7 +172,7 @@
 
 <!-- ============ WORK ============ -->
 <section class="section" id="work" data-bg="work">
-  {% if pdf_mode %}{% include "portfolio/_pdf_bg.html" with src="portfolio/img/bg-work.png" pos="center" o=".28" %}{% endif %}
+  <!-- {% if pdf_mode %}{% include "portfolio/_pdf_bg.html" with src="portfolio/img/bg-work.png" pos="center" o=".28" %}{% endif %} -->
 
   <p class="eyebrow">{{ c.work.eyebrow }}</p>
 
@@ -173,7 +228,7 @@
 
 <!-- ============ REVIEWS ============ -->
 <section class="section" id="reviews" data-bg="reviews">
-  {% if pdf_mode %}{% include "portfolio/_pdf_bg.html" with src="portfolio/img/bg-reviews.png" pos="start" o=".45" %}{% endif %}
+  <!-- {% if pdf_mode %}{% include "portfolio/_pdf_bg.html" with src="portfolio/img/bg-reviews.png" pos="start" o=".45" %}{% endif %} -->
   <p class="eyebrow">{{ c.reviews.eyebrow }}</p>
   <h2 class="display center">{{ c.reviews.title }}</h2>
   <div class="reviews">

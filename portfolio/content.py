@@ -32,6 +32,7 @@ CONTENT = {
             ("reviews", "Reviews"),
             ("blog", "Blog"),
             ("experience", "Experience"),      # در en
+            ("certificates", "Certificates"),
         ],
         "cta": "Get in touch",
         "hero": {
@@ -56,7 +57,8 @@ CONTENT = {
             "text": "From architecture and APIs to AI models and automation pipelines, I care about every detail: reliability, performance, and how smoothly it works for the business behind it. My toolkit spans back-end frameworks like Django and FastAPI, desktop apps with PyQt, computer vision with YOLO and OpenCV, and LLM-powered assistants.",
             "cta": "Get in touch",
         },
-        "experience": {"eyebrow": "Experience", "title": "Where I've worked"},  
+        "experience": {"eyebrow": "Experience", "title": "Where I've worked"}, 
+        "certificates": {"eyebrow": "Certificates", "title": "Certifications & awards"}, 
         "skills_title": "Tools I reach for",
         "skills": [
             ("Python / Django", 100), ("FastAPI", 95), ("REST & APIs", 90),
@@ -190,6 +192,7 @@ CONTENT = {
             ("reviews", "نظرها"),
             ("blog", "وبلاگ"),
             ("experience", "سابقه کاری"),      # در fa
+            ("certificates", "گواهینامه‌ها"),
         ],
         "cta": "ارتباط با من",
         "hero": {
@@ -204,7 +207,7 @@ CONTENT = {
             ("۶", "سال تجربه"),
             ("۱۵", "پروژه تحویل‌شده"),
             ("۱۵", "کارفرمای راضی"),
-            ("۹۵٪", "رضایت کارفرما"),
+            ("۹۵", "رضایت کارفرما"),
         ],
         "about": {
             "eyebrow": "پشت صحنه کار",
@@ -216,6 +219,7 @@ CONTENT = {
             
         },
         "experience": {"eyebrow": "سابقه کاری", "title": "جاهایی که کار کرده‌ام"}, 
+        "certificates": {"eyebrow": "گواهینامه‌ها", "title": "گواهینامه‌ها و افتخارات"},
         "skills_title": "ابزارهایی که با آن‌ها کار می‌کنم",
         "skills": [
             ("Python و Django", 100), ("FastAPI", 95), ("REST و API", 90),
@@ -332,6 +336,7 @@ CONTENT = {
             "all_posts": "همه مقاله‌ها",
             "all_projects": "مشاهده همه پروژه‌ها",  # <--- این خط را اضافه کنید
             "pdf": "دانلود PDF", 
+            
         },
     },
 }

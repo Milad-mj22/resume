@@ -5,7 +5,7 @@ from django.views.decorators.http import require_POST
 from django.http import Http404, HttpResponse, JsonResponse
 from .content import CONTENT, DEFAULT_LANG
 from .forms import ContactForm
-from .models import Post, Project, SiteSettings  # SiteSettings به اینجا منتقل شد
+from .models import Certificate, Post, Project, SiteSettings  # SiteSettings به اینجا منتقل شد
 
 
 def _lang(lang):
@@ -101,11 +101,13 @@ def home(request, lang):
     lang = _lang(lang)
     projects = [_project_card(p, lang, i) for i, p in enumerate(Project.objects.filter(published=True))]
     experiences = [_experience_card(e, lang) for e in Experience.objects.filter(published=True)]
+    certificates = [_certificate_card(c, lang) for c in Certificate.objects.filter(published=True)]
     pdf_mode = request.GET.get("pdf") == "1"
     posts = [] if pdf_mode else [_post_card(p, lang) for p in Post.objects.filter(published=True)[:3]]
     return render(request, "portfolio/index.html",
                   _ctx(request, lang, "portfolio:home", projects=projects, posts=posts,
-                       experiences=experiences, pdf_mode=pdf_mode))
+                       experiences=experiences, certificates=certificates, pdf_mode=pdf_mode))
+
 
 def project_detail(request, lang, slug):
     lang = _lang(lang)
@@ -197,3 +199,16 @@ def export_pdf(request, lang):
     resp = HttpResponse(data, content_type="application/pdf")
     resp["Content-Disposition"] = f'attachment; filename="portfolio-{lang}.pdf"'
     return resp
+
+
+
+
+def _certificate_card(c, lang):
+    return {
+        "title": c.tr("title", lang),
+        "issuer": c.tr("issuer", lang),
+        "date": c.tr("date", lang),
+        "desc": c.tr("desc", lang),
+        "image": c.image.url if c.image else "",
+        "link": c.link,
+    }

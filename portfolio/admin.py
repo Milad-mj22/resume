@@ -65,3 +65,17 @@ class ExperienceAdmin(admin.ModelAdmin):
         ("English", {"fields": ("role_en", "company_en", "location_en", "period_en", "desc_en", "tags_en")}),
         ("فارسی", {"fields": ("role_fa", "company_fa", "location_fa", "period_fa", "desc_fa", "tags_fa")}),
     )
+
+
+
+from .models import Certificate
+
+@admin.register(Certificate)
+class CertificateAdmin(admin.ModelAdmin):
+    list_display = ("title_en", "issuer_en", "date_en", "order", "published")
+    list_editable = ("order", "published")
+    fieldsets = (
+        (None, {"fields": ("order", "published", "image", "link")}),
+        ("English", {"fields": ("title_en", "issuer_en", "date_en", "desc_en")}),
+        ("فارسی", {"fields": ("title_fa", "issuer_fa", "date_fa", "desc_fa")}),
+    )
