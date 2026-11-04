@@ -4,6 +4,19 @@
 
 DEFAULT_LANG = "fa"
 
+# At the top of portfolio/content.py, after DEFAULT_LANG
+DEFAULT_THEME = "ocean"
+
+THEMES = [
+    {"key": "ocean",  "label_en": "Ocean",  "label_fa": "اقیانوس",  "color": "#3b82f6"},
+    {"key": "forest", "label_en": "Forest", "label_fa": "جنگل",     "color": "#22c55e"},
+    {"key": "violet", "label_en": "Violet", "label_fa": "بنفش",     "color": "#8b5cf6"},
+    {"key": "rose",   "label_en": "Rose",   "label_fa": "رز",       "color": "#ec4899"},
+    {"key": "gold",   "label_en": "Gold",   "label_fa": "طلایی",    "color": "#eab308"},
+]
+
+
+
 CONTENT = {
     # ------------------------------------------------------------------ English
     "en": {
@@ -18,6 +31,7 @@ CONTENT = {
             ("work", "Selected work"),
             ("reviews", "Reviews"),
             ("blog", "Blog"),
+            ("experience", "Experience"),      # در en
         ],
         "cta": "Get in touch",
         "hero": {
@@ -42,6 +56,7 @@ CONTENT = {
             "text": "From architecture and APIs to AI models and automation pipelines, I care about every detail: reliability, performance, and how smoothly it works for the business behind it. My toolkit spans back-end frameworks like Django and FastAPI, desktop apps with PyQt, computer vision with YOLO and OpenCV, and LLM-powered assistants.",
             "cta": "Get in touch",
         },
+        "experience": {"eyebrow": "Experience", "title": "Where I've worked"},  
         "skills_title": "Tools I reach for",
         "skills": [
             ("Python / Django", 100), ("FastAPI", 95), ("REST & APIs", 90),
@@ -157,6 +172,7 @@ CONTENT = {
             "overview": "Overview", "more_work": "More projects", "latest": "From the blog",
             "all_posts": "View all articles",
             "all_projects": "View all projects",
+            "pdf": "PDF",
         },
     },
 
@@ -173,6 +189,7 @@ CONTENT = {
             ("work", "نمونه‌کارها"),
             ("reviews", "نظرها"),
             ("blog", "وبلاگ"),
+            ("experience", "سابقه کاری"),      # در fa
         ],
         "cta": "ارتباط با من",
         "hero": {
@@ -196,7 +213,9 @@ CONTENT = {
             "lead": "توسعه‌دهنده نرم‌افزار و هوش مصنوعی که ایده‌های جاه‌طلبانه را به سیستم‌های مقیاس‌پذیر و هوشمند تبدیل می‌کند.",
             "text": "از معماری و API تا مدل‌های هوش مصنوعی و خطوط خودکارسازی، به همه جزئیات اهمیت می‌دهم: پایداری، کارایی و روان‌بودن آن برای کسب‌وکار. جعبه‌ابزار من از فریمورک‌های بک‌اند مثل Django و FastAPI تا اپلیکیشن‌های دسکتاپ با PyQt، بینایی ماشین با YOLO و OpenCV و دستیارهای مبتنی بر LLM را در بر می‌گیرد.",
             "cta": "ارتباط با من",
+            
         },
+        "experience": {"eyebrow": "سابقه کاری", "title": "جاهایی که کار کرده‌ام"}, 
         "skills_title": "ابزارهایی که با آن‌ها کار می‌کنم",
         "skills": [
             ("Python و Django", 100), ("FastAPI", 95), ("REST و API", 90),
@@ -312,6 +331,7 @@ CONTENT = {
             "overview": "معرفی", "more_work": "پروژه‌های دیگر", "latest": "از وبلاگ",
             "all_posts": "همه مقاله‌ها",
             "all_projects": "مشاهده همه پروژه‌ها",  # <--- این خط را اضافه کنید
+            "pdf": "دانلود PDF", 
         },
     },
 }

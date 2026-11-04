@@ -2,7 +2,7 @@ from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_POST
-
+from django.http import Http404, HttpResponse, JsonResponse
 from .content import CONTENT, DEFAULT_LANG
 from .forms import ContactForm
 from .models import Post, Project, SiteSettings  # SiteSettings به اینجا منتقل شد
@@ -15,24 +15,30 @@ def _lang(lang):
 
 
 def _ctx(request, lang, url_name, **kw):
-    """کانتکست مشترک؛ url_en / url_fa برای دکمه تغییر زبان در همان صفحه."""
     request.session["lang"] = lang
     
-    # دریافت تنظیمات سایت از دیتابیس
-    settings_obj = SiteSettings.objects.first()
-    if not settings_obj:
-        settings_obj = SiteSettings()
-
+    settings_obj = SiteSettings.objects.first() or SiteSettings()
+    
+    # themes list
+    themes = [
+        {
+            "key": t["key"],
+            "label": t["label_fa"] if lang == "fa" else t["label_en"],
+            "color": t["color"],
+        }
+        for t in THEMES
+    ]
+    
     return {
         "c": CONTENT[lang],
         "lang": lang,
         "dir": "rtl" if lang == "fa" else "ltr",
-        "site_settings": settings_obj,  # <-- اضافه شد
+        "site_settings": settings_obj,
+        "themes": themes,
         "url_en": reverse(url_name, kwargs={**kw.get("kwargs", {}), "lang": "en"}),
         "url_fa": reverse(url_name, kwargs={**kw.get("kwargs", {}), "lang": "fa"}),
         **{k: v for k, v in kw.items() if k != "kwargs"},
     }
-
 
 def _project_card(p, lang, i=0):
     main_image = p.image.url if p.image else None
@@ -78,13 +84,28 @@ def root_redirect(request):
     return redirect("portfolio:home", lang=lang if lang in CONTENT else DEFAULT_LANG)
 
 
+from .models import Experience, Post, Project, SiteSettings
+
+def _experience_card(e, lang):
+    return {
+        "role": e.tr("role", lang),
+        "company": e.tr("company", lang),
+        "location": e.tr("location", lang),
+        "period": e.tr("period", lang),
+        "bullets": e.bullets(lang),
+        "tags": e.tag_list(lang),
+        "link": e.link,
+    }
+
 def home(request, lang):
     lang = _lang(lang)
     projects = [_project_card(p, lang, i) for i, p in enumerate(Project.objects.filter(published=True))]
-    posts = [_post_card(p, lang) for p in Post.objects.filter(published=True)[:3]]
+    experiences = [_experience_card(e, lang) for e in Experience.objects.filter(published=True)]
+    pdf_mode = request.GET.get("pdf") == "1"
+    posts = [] if pdf_mode else [_post_card(p, lang) for p in Post.objects.filter(published=True)[:3]]
     return render(request, "portfolio/index.html",
-                  _ctx(request, lang, "portfolio:home", projects=projects, posts=posts))
-
+                  _ctx(request, lang, "portfolio:home", projects=projects, posts=posts,
+                       experiences=experiences, pdf_mode=pdf_mode))
 
 def project_detail(request, lang, slug):
     lang = _lang(lang)
@@ -140,3 +161,39 @@ def projects_list(request, lang):
     projects = [_project_card(p, lang, i) for i, p in enumerate(all_projects)]
     return render(request, "portfolio/projects_list.html", 
                   _ctx(request, lang, "portfolio:projects_list", projects=projects))
+
+
+
+
+from .content import CONTENT, DEFAULT_LANG, THEMES
+
+def set_theme(request, theme_key):
+    """ذخیره تم در سشن و برگشت به همان صفحه."""
+    from .content import THEMES as T
+    valid = {t["key"] for t in T}
+    if theme_key in valid:
+        request.session["theme"] = theme_key
+    # back to referring page or home
+    next_url = request.META.get("HTTP_REFERER") or reverse(
+        "portfolio:home", kwargs={"lang": request.session.get("lang", DEFAULT_LANG)}
+    )
+    return redirect(next_url)
+
+
+
+
+def export_pdf(request, lang):
+    lang = _lang(lang)
+    url = request.build_absolute_uri(reverse("portfolio:home", kwargs={"lang": lang})) + "?pdf=1"
+    try:
+        from .pdf import render_pdf
+        data = render_pdf(url, cookies=request.COOKIES)
+    except RuntimeError as e:      # مرورگر پیدا نشد
+        return HttpResponse(str(e), status=500, content_type="text/plain; charset=utf-8")
+    except ImportError:
+        
+        return HttpResponse("pip install playwright\nplaywright install chromium",
+                            status=500, content_type="text/plain; charset=utf-8")
+    resp = HttpResponse(data, content_type="application/pdf")
+    resp["Content-Disposition"] = f'attachment; filename="portfolio-{lang}.pdf"'
+    return resp

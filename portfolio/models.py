@@ -127,3 +127,40 @@ class SiteSettings(models.Model):
 
     def __str__(self):
         return "تنظیمات کلی سایت"
+
+
+
+
+class Experience(Bilingual):
+    order = models.PositiveIntegerField("ترتیب", default=0, help_text="عدد کمتر = بالاتر (جدیدترین سابقه را 0 بگذارید)")
+    published = models.BooleanField("منتشر شده", default=True)
+    link = models.URLField("وب‌سایت شرکت", blank=True)
+
+    company_en = models.CharField("Company (EN)", max_length=160)
+    company_fa = models.CharField("نام شرکت (فارسی)", max_length=160, blank=True)
+    role_en = models.CharField("Role (EN)", max_length=160)
+    role_fa = models.CharField("عنوان شغلی (فارسی)", max_length=160, blank=True)
+    location_en = models.CharField("Location (EN)", max_length=120, blank=True)
+    location_fa = models.CharField("محل (فارسی)", max_length=120, blank=True)
+    period_en = models.CharField("Period (EN)", max_length=80, help_text="مثلاً: 2022 — Present")
+    period_fa = models.CharField("بازه‌ی زمانی (فارسی)", max_length=80, blank=True, help_text="مثلاً: ۱۴۰۱ — اکنون")
+    desc_en = models.TextField("Responsibilities (EN)", blank=True, help_text="هر خط یک مورد (بولت) می‌شود")
+    desc_fa = models.TextField("شرح وظایف و دستاوردها (فارسی)", blank=True, help_text="هر خط یک مورد (بولت) می‌شود")
+    tags_en = models.CharField("Tech (EN)", max_length=200, blank=True, help_text="با ویرگول جدا کنید")
+    tags_fa = models.CharField("فناوری‌ها (فارسی)", max_length=200, blank=True, help_text="با ویرگول جدا کنید")
+
+    class Meta:
+        ordering = ["order", "id"]
+        verbose_name = "سابقه کاری"
+        verbose_name_plural = "سوابق کاری"
+
+    def __str__(self):
+        return f"{self.role_en} @ {self.company_en}"
+
+    def bullets(self, lang):
+        lines = self.tr("desc", lang).splitlines()
+        return [l.strip().lstrip("-•*– ").strip() for l in lines if l.strip()]
+
+    def tag_list(self, lang):
+        raw = self.tr("tags", lang).replace("،", ",")
+        return [t.strip() for t in raw.split(",") if t.strip()]

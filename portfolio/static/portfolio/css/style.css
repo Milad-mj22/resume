@@ -282,3 +282,75 @@ ul{list-style:none}
 @media (prefers-reduced-motion:reduce){.bg-layer{filter:none;transform:none}}
 
 .logo{display:block;color:var(--accent);flex:none}
+
+
+.theme-switcher{position:relative}
+.theme-dot{
+  width:14px;height:14px;border-radius:50%;
+  background:var(--accent);
+  display:inline-block;flex:none;
+  box-shadow:0 0 0 2px rgba(255,255,255,.15);
+  transition:background .3s;
+}
+.theme-menu a{display:flex;align-items:center;gap:10px}
+.lang.open .lang-menu,
+.theme-switcher.open .lang-menu{
+  opacity:1;visibility:visible;transform:none;
+}
+
+
+/* ===== Download-PDF button ===== */
+.pdf-btn{display:inline-flex;align-items:center;gap:8px}
+
+/* ===== PDF export mode (?pdf=1) ===== */
+.pdf-mode{--pdf-vh:800px}                     /* باید با VIEWPORT_H در pdf.py یکی باشد */
+.pdf-mode .bg-stage{display:none}
+.pdf-mode .hero{min-height:var(--pdf-vh);padding-top:90px}
+.pdf-mode .hero .tl,.pdf-mode .hero-mark{top:40px}
+.pdf-mode section{position:relative;overflow:hidden}
+.pdf-mode .section{padding-block:80px}
+.pdf-mode .bar i{width:var(--w)}
+.pdf-mode *{transition:none!important;animation:none!important}
+.pdf-mode .about-text .pill-btn{display:none}   /* دکمه‌ی «ارتباط با من» بی‌معناست */
+
+.pdf-bg{position:absolute;inset:0;z-index:-1;pointer-events:none;display:grid;justify-items:center;align-items:start;opacity:var(--o,1);
+  -webkit-mask-image:linear-gradient(#000 55%,transparent);mask-image:linear-gradient(#000 55%,transparent)}
+.pdf-bg[data-pos="start"]{justify-items:start}
+.pdf-bg[data-pos="end"]{justify-items:end}
+.pdf-bg img{height:720px;width:auto;max-width:none;filter:contrast(1.05) saturate(.9)}
+.pdf-bg.hero-bg{align-items:end}
+.pdf-bg.hero-bg img{height:calc(var(--pdf-vh) * .94)}
+
+
+
+/* ===== Experience timeline ===== */
+.timeline{position:relative;display:flex;flex-direction:column;gap:22px}
+.timeline::before{content:"";position:absolute;inset-block:10px;inset-inline-start:226px;width:1px;
+  background:linear-gradient(var(--accent),color-mix(in srgb,var(--accent) 8%,transparent))}
+.exp{position:relative;display:grid;grid-template-columns:200px 1fr;gap:52px;align-items:start}
+.exp::before{content:"";position:absolute;top:30px;inset-inline-start:221px;width:11px;height:11px;border-radius:50%;
+  background:var(--accent);box-shadow:0 0 0 5px color-mix(in srgb,var(--accent) 22%,transparent)}
+.exp-period{padding-top:24px;text-align:end;font-size:.88rem;font-weight:500;color:var(--ink-2)}
+.exp-card{padding:26px 28px;display:flex;flex-direction:column;gap:12px;transition:border-color .3s,transform .3s}
+.exp-card:hover{border-color:color-mix(in srgb,var(--accent) 45%,transparent);transform:translateY(-3px)}
+.exp-card h3{font-size:1.4rem;font-weight:600;letter-spacing:-.01em;line-height:1.35}
+.exp-company{font-size:.92rem;color:var(--accent);font-weight:500}
+.exp-company a:hover{text-decoration:underline}
+.exp-loc{color:var(--muted);font-weight:400;margin-inline-start:4px}
+.exp-points{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.exp-points li{position:relative;padding-inline-start:18px;font-size:.92rem;color:var(--ink-2);line-height:1.7}
+.exp-points li::before{content:"";position:absolute;inset-inline-start:0;top:.7em;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+@media (max-width:980px){
+  .timeline::before{inset-inline-start:5px}
+  .exp{grid-template-columns:1fr;gap:10px;padding-inline-start:30px}
+  .exp::before{inset-inline-start:0;top:6px}
+  .exp-period{text-align:start;padding-top:0}
+}
+
+
+.exp-link{display:inline-flex;align-items:center;gap:6px;padding-bottom:1px;
+  border-bottom:1px dashed color-mix(in srgb,var(--accent) 55%,transparent);transition:.2s}
+.exp-link:hover{border-bottom-style:solid;text-decoration:none}
+.exp-link svg{flex:none;transition:transform .2s}
+.exp-link:hover svg{transform:translate(2px,-2px)}
+[dir="rtl"] .exp-link:hover svg{transform:translate(-2px,-2px)}

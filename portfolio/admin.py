@@ -51,3 +51,17 @@ class SiteSettingsAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         # جلوگیری از ساخت بیش از یک رکورد تنظیمات
         return not SiteSettings.objects.exists()
+
+
+
+from .models import ContactMessage, Experience, Post, Project, SiteSettings   # Experience اضافه شد
+
+@admin.register(Experience)
+class ExperienceAdmin(admin.ModelAdmin):
+    list_display = ("role_en", "company_en", "period_en", "order", "published")
+    list_editable = ("order", "published")
+    fieldsets = (
+        (None, {"fields": ("order", "published", "link")}),
+        ("English", {"fields": ("role_en", "company_en", "location_en", "period_en", "desc_en", "tags_en")}),
+        ("فارسی", {"fields": ("role_fa", "company_fa", "location_fa", "period_fa", "desc_fa", "tags_fa")}),
+    )

@@ -1,6 +1,11 @@
 from django.conf import settings
 
-
 def theme(request):
-    """نام تم آماده (SITE_THEME در settings.py) را به همه‌ی قالب‌ها می‌دهد."""
-    return {"theme": getattr(settings, "SITE_THEME", "")}
+    """تم انتخابی کاربر را از سشن می‌خواند؛ در غیر این صورت از settings."""
+    default = getattr(settings, "SITE_THEME", "ocean")
+    current = request.session.get("theme", default)
+    from .content import THEMES
+    valid = {t["key"] for t in THEMES}
+    if current not in valid:
+        current = default
+    return {"theme": current}

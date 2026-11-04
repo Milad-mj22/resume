@@ -17,13 +17,16 @@
     links.classList.remove("open"); burger.setAttribute("aria-expanded", "false");
   }));
 
-  /* ---------- Language dropdown ---------- */
-  const lang = $("#lang"), langBtn = $(".lang-btn", lang);
-  langBtn.addEventListener("click", e => {
+$$(".lang, .theme-switcher").forEach(box => {
+  const btn = $(".lang-btn", box);
+  if (!btn) return;
+  btn.addEventListener("click", e => {
     e.stopPropagation();
-    langBtn.setAttribute("aria-expanded", lang.classList.toggle("open"));
+    $$(".lang, .theme-switcher").forEach(b => b !== box && b.classList.remove("open"));
+    const open = box.classList.toggle("open");
+    btn.setAttribute("aria-expanded", open);
   });
-  document.addEventListener("click", () => { lang.classList.remove("open"); langBtn.setAttribute("aria-expanded", "false"); });
+});
 
   /* ---------- Count-up (supports Persian digits) ---------- */
   const fa = "۰۱۲۳۴۵۶۷۸۹";

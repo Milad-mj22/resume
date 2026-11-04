@@ -12,9 +12,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Vazirmatn:wght@300;400;500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'portfolio/css/style.css' %}">
 </head>
-<body>
+<body{% if pdf_mode %} class="pdf-mode"{% endif %}>
   <div class="bg-glow" aria-hidden="true"></div>
 
+  {% if not pdf_mode %}
   <header class="nav" id="nav">
     <a href="{{ home_url }}" class="brand">
       {% include "portfolio/_logo.html" with s=26 %}
@@ -27,6 +28,30 @@
     </nav>
 
     <div class="nav-actions">
+      <a class="lang-btn pdf-btn" href="{% url 'portfolio:export_pdf' lang=lang %}" download title="PDF">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 20h16"/></svg>
+        <span>{{ c.ui.pdf }}</span>
+      </a>
+      
+      <div class="theme-switcher" id="themeSwitcher">
+        <button class="lang-btn" type="button" aria-haspopup="true" aria-expanded="false">
+          <span class="theme-dot"></span>
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="m2 3.5 3 3 3-3"/>
+          </svg>
+        </button>
+        <ul class="lang-menu theme-menu">
+          {% for t in themes %}
+          <li>
+            <a href="{% url 'portfolio:set_theme' theme_key=t.key %}">
+              <span class="theme-dot" style="background:{{ t.color }}"></span>
+              {{ t.label }}
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+
       <div class="lang" id="lang">
         <button class="lang-btn" type="button" aria-haspopup="true" aria-expanded="false">
           <span class="flag">{{ c.flag }}</span><span>{{ c.lang_label }}</span>
@@ -44,14 +69,17 @@
       <button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
     </div>
   </header>
+  {% endif %}
 
   {% block content %}{% endblock %}
 
+  {% if not pdf_mode %}
   <footer class="footer">
     {% include "portfolio/_logo.html" with s=18 %}
     <span>{{ c.footer }}</span>
   </footer>
 
   <script src="{% static 'portfolio/js/main.js' %}" defer></script>
+  {% endif %}
 </body>
 </html>
