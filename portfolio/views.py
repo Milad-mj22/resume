@@ -14,12 +14,11 @@ def _lang(lang):
     return lang
 
 
+from .content import get_content, DEFAULT_LANG, THEMES
+
 def _ctx(request, lang, url_name, **kw):
     request.session["lang"] = lang
-    
     settings_obj = SiteSettings.objects.first() or SiteSettings()
-    
-    # themes list
     themes = [
         {
             "key": t["key"],
@@ -28,9 +27,8 @@ def _ctx(request, lang, url_name, **kw):
         }
         for t in THEMES
     ]
-    
     return {
-        "c": CONTENT[lang],
+        "c": get_content(lang),          # ← تنها تغییر
         "lang": lang,
         "dir": "rtl" if lang == "fa" else "ltr",
         "site_settings": settings_obj,

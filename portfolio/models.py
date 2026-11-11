@@ -113,7 +113,168 @@ class ProjectImage(models.Model):
 
 
 
-class SiteSettings(models.Model):
+from django.db import models
+
+# --- بقیه مدل‌ها بدون تغییر ---
+
+class SiteSettings(Bilingual):
+    """
+    Singleton — تنها یک رکورد. همه فیلدهای هویتی و متنی اینجا هستند.
+    هر فیلد دوزبانه: _en و _fa
+    """
+
+    # ==== برند و هویتی ====
+    name_en = models.CharField("Name (EN)", max_length=120, blank=True)
+    name_fa = models.CharField("نام (فارسی)", max_length=120, blank=True)
+    brand_en = models.CharField("Brand (EN)", max_length=120, blank=True)
+    brand_fa = models.CharField("برند (فارسی)", max_length=120, blank=True)
+    page_title_en = models.CharField("Page title (EN)", max_length=200, blank=True)
+    page_title_fa = models.CharField("عنوان صفحه (فارسی)", max_length=200, blank=True)
+    lang_label_en = models.CharField("Language label (EN)", max_length=60, blank=True, default="English")
+    lang_label_fa = models.CharField("برچسب زبان (فارسی)", max_length=60, blank=True, default="فارسی")
+    flag_en = models.CharField("Flag (EN)", max_length=16, blank=True, default="🇺🇸")
+    flag_fa = models.CharField("پرچم (فارسی)", max_length=16, blank=True, default="🇮🇷")
+    cta_en = models.CharField("CTA (EN)", max_length=80, blank=True)
+    cta_fa = models.CharField("دعوت به اقدام (فارسی)", max_length=80, blank=True)
+    footer_en = models.CharField("Footer (EN)", max_length=200, blank=True)
+    footer_fa = models.CharField("فوتر (فارسی)", max_length=200, blank=True)
+
+    # ==== Hero ====
+    hero_eyebrow_en = models.CharField(max_length=120, blank=True)
+    hero_eyebrow_fa = models.CharField(max_length=120, blank=True)
+    hero_hey_en = models.CharField(max_length=120, blank=True)
+    hero_hey_fa = models.CharField(max_length=120, blank=True)
+    hero_line1_en = models.CharField(max_length=200, blank=True)
+    hero_line1_fa = models.CharField(max_length=200, blank=True)
+    hero_line2_en = models.CharField(max_length=200, blank=True)
+    hero_line2_fa = models.CharField(max_length=200, blank=True)
+    hero_text_en = models.TextField(blank=True)
+    hero_text_fa = models.TextField(blank=True)
+    hero_link_en = models.CharField(max_length=120, blank=True)
+    hero_link_fa = models.CharField(max_length=120, blank=True)
+
+    # ==== About ====
+    about_eyebrow_en = models.CharField(max_length=120, blank=True)
+    about_eyebrow_fa = models.CharField(max_length=120, blank=True)
+    about_title_a_en = models.CharField(max_length=200, blank=True)
+    about_title_a_fa = models.CharField(max_length=200, blank=True)
+    about_title_b_en = models.CharField(max_length=200, blank=True)
+    about_title_b_fa = models.CharField(max_length=200, blank=True)
+    about_lead_en = models.TextField(blank=True)
+    about_lead_fa = models.TextField(blank=True)
+    about_text_en = models.TextField(blank=True)
+    about_text_fa = models.TextField(blank=True)
+    about_cta_en = models.CharField(max_length=80, blank=True)
+    about_cta_fa = models.CharField(max_length=80, blank=True)
+
+    # ==== عناوین بخش‌ها ====
+    skills_title_en = models.CharField(max_length=160, blank=True)
+    skills_title_fa = models.CharField(max_length=160, blank=True)
+    work_eyebrow_en = models.CharField(max_length=120, blank=True)
+    work_eyebrow_fa = models.CharField(max_length=120, blank=True)
+    work_title_en = models.CharField(max_length=200, blank=True)
+    work_title_fa = models.CharField(max_length=200, blank=True)
+    work_label_en = models.CharField(max_length=80, blank=True)
+    work_label_fa = models.CharField(max_length=80, blank=True)
+
+    # ==== Reviews ====
+    reviews_eyebrow_en = models.CharField(max_length=120, blank=True)
+    reviews_eyebrow_fa = models.CharField(max_length=120, blank=True)
+    reviews_title_en = models.CharField(max_length=200, blank=True)
+    reviews_title_fa = models.CharField(max_length=200, blank=True)
+
+    # ==== Contact ====
+    contact_eyebrow_en = models.CharField(max_length=200, blank=True)
+    contact_eyebrow_fa = models.CharField(max_length=200, blank=True)
+    contact_title_en = models.CharField(max_length=160, blank=True)
+    contact_title_fa = models.CharField(max_length=160, blank=True)
+    contact_text_en = models.TextField(blank=True)
+    contact_text_fa = models.TextField(blank=True)
+    contact_name_en = models.CharField(max_length=80, blank=True)
+    contact_name_fa = models.CharField(max_length=80, blank=True)
+    contact_phone_en = models.CharField(max_length=80, blank=True)
+    contact_phone_fa = models.CharField(max_length=80, blank=True)
+    contact_email_en = models.CharField(max_length=80, blank=True)
+    contact_email_fa = models.CharField(max_length=80, blank=True)
+    contact_project_en = models.CharField(max_length=120, blank=True)
+    contact_project_fa = models.CharField(max_length=120, blank=True)
+    contact_message_en = models.CharField(max_length=80, blank=True)
+    contact_message_fa = models.CharField(max_length=80, blank=True)
+    contact_submit_en = models.CharField(max_length=80, blank=True)
+    contact_submit_fa = models.CharField(max_length=80, blank=True)
+    contact_sending_en = models.CharField(max_length=80, blank=True)
+    contact_sending_fa = models.CharField(max_length=80, blank=True)
+    contact_success_en = models.CharField(max_length=200, blank=True)
+    contact_success_fa = models.CharField(max_length=200, blank=True)
+    contact_error_en = models.CharField(max_length=200, blank=True)
+    contact_error_fa = models.CharField(max_length=200, blank=True)
+
+    # ==== UI labels ====
+    ui_blog_en = models.CharField(max_length=80, blank=True)
+    ui_blog_fa = models.CharField(max_length=80, blank=True)
+    ui_blog_eyebrow_en = models.CharField(max_length=80, blank=True)
+    ui_blog_eyebrow_fa = models.CharField(max_length=80, blank=True)
+    ui_blog_title_en = models.CharField(max_length=200, blank=True)
+    ui_blog_title_fa = models.CharField(max_length=200, blank=True)
+    ui_blog_text_en = models.TextField(blank=True)
+    ui_blog_text_fa = models.TextField(blank=True)
+    ui_blog_empty_en = models.CharField(max_length=200, blank=True)
+    ui_blog_empty_fa = models.CharField(max_length=200, blank=True)
+    ui_read_more_en = models.CharField(max_length=80, blank=True)
+    ui_read_more_fa = models.CharField(max_length=80, blank=True)
+    ui_back_blog_en = models.CharField(max_length=80, blank=True)
+    ui_back_blog_fa = models.CharField(max_length=80, blank=True)
+    ui_back_work_en = models.CharField(max_length=80, blank=True)
+    ui_back_work_fa = models.CharField(max_length=80, blank=True)
+    ui_visit_en = models.CharField(max_length=80, blank=True)
+    ui_visit_fa = models.CharField(max_length=80, blank=True)
+    ui_overview_en = models.CharField(max_length=80, blank=True)
+    ui_overview_fa = models.CharField(max_length=80, blank=True)
+    ui_more_work_en = models.CharField(max_length=80, blank=True)
+    ui_more_work_fa = models.CharField(max_length=80, blank=True)
+    ui_latest_en = models.CharField(max_length=80, blank=True)
+    ui_latest_fa = models.CharField(max_length=80, blank=True)
+    ui_all_posts_en = models.CharField(max_length=80, blank=True)
+    ui_all_posts_fa = models.CharField(max_length=80, blank=True)
+    ui_all_projects_en = models.CharField(max_length=80, blank=True)
+    ui_all_projects_fa = models.CharField(max_length=80, blank=True)
+    ui_pdf_en = models.CharField(max_length=40, blank=True)
+    ui_pdf_fa = models.CharField(max_length=40, blank=True)
+
+    # ==== Experience / Certificates عناوین بخش ====
+    exp_eyebrow_en = models.CharField(max_length=80, blank=True)
+    exp_eyebrow_fa = models.CharField(max_length=80, blank=True)
+    exp_title_en = models.CharField(max_length=160, blank=True)
+    exp_title_fa = models.CharField(max_length=160, blank=True)
+    cert_eyebrow_en = models.CharField(max_length=80, blank=True)
+    cert_eyebrow_fa = models.CharField(max_length=80, blank=True)
+    cert_title_en = models.CharField(max_length=160, blank=True)
+    cert_title_fa = models.CharField(max_length=160, blank=True)
+
+    # ==== لیست‌ها با JsonField ====
+    # ساختار: [{"en": "...", "fa": "...", ...}, ...]
+    nav_items = models.JSONField(
+        "منوی ناوبری", default=list, blank=True,
+        help_text='[{"id":"about","en":"About","fa":"درباره"}, ...]'
+    )
+    stats = models.JSONField(
+        "آمار", default=list, blank=True,
+        help_text='[{"en":"6","fa":"۶","label_en":"Years","label_fa":"سال"}, ...]'
+    )
+    skills = models.JSONField(
+        "مهارت‌ها", default=list, blank=True,
+        help_text='[{"en":"Python","fa":"پایتون","level":100}, ...]'
+    )
+    reviews = models.JSONField(
+        "نظرات", default=list, blank=True,
+        help_text='[{"name_en":"Sara","name_fa":"سارا","role_en":"...","role_fa":"...","text_en":"...","text_fa":"..."}, ...]'
+    )
+    project_options = models.JSONField(
+        "گزینه‌های نوع پروژه", default=list, blank=True,
+        help_text='["Software system", "AI solution", ...] (به هر دو زبان مشترک است یا می‌توانید dict بسازید)'
+    )
+
+    # ==== شبکه‌های اجتماعی (موجود) ====
     phone = models.CharField("شماره تماس", max_length=40, blank=True)
     email = models.EmailField("ایمیل", blank=True)
     linkedin = models.URLField("لینک لینکدین", blank=True)
@@ -122,12 +283,17 @@ class SiteSettings(models.Model):
     telegram = models.URLField("لینک تلگرام", blank=True)
 
     class Meta:
-        verbose_name = "تنظیمات سایت"
-        verbose_name_plural = "تنظیمات سایت"
+        verbose_name = "تنظیمات و محتوای سایت"
+        verbose_name_plural = "تنظیمات و محتوای سایت"
 
     def __str__(self):
         return "تنظیمات کلی سایت"
 
+    @classmethod
+    def load(cls):
+        """همیشه یک رکورد برمی‌گرداند (اگر نبود، می‌سازد)."""
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
 
 
 

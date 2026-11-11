@@ -340,3 +340,141 @@ CONTENT = {
         },
     },
 }
+
+
+
+
+
+def _pick(obj, field, lang, default=""):
+    """مقدار فیلد دوزبانه را برمی‌گرداند، اگر خالی بود از default استفاده می‌کند."""
+    val = getattr(obj, f"{field}_{lang}", "") or getattr(obj, f"{field}_{'en' if lang=='fa' else 'fa'}", "")
+    return val or default
+
+def get_content(lang):
+    """
+    محتوای سایت را از دیتابیس می‌خواند و با fallback به CONTENT دیکشنری نهایی می‌سازد.
+    رنگ‌ها (THEMES) از فایل می‌مانند.
+    """
+    from .models import SiteSettings
+    s = SiteSettings.load()
+    base = CONTENT[lang]
+    other_lang = "en" if lang == "fa" else "fa"
+
+    def bi(field, default=""):
+        return _pick(s, field, lang, default)
+
+    def jlist(field, default_list, lang_key="fa" if lang == "fa" else "en"):
+        """
+        یک JsonField که لیستی از dictهاست. هر آیتم ممکن است کلید lang یا کلید مشترک داشته باشد.
+        """
+        data = getattr(s, field, None)
+        if not data:
+            return default_list
+        return data
+
+    content = {
+        "name": bi("name", base["name"]),
+        "brand": bi("brand", base["brand"]),
+        "title": bi("page_title", base["title"]),
+        "lang_label": bi("lang_label", base["lang_label"]),
+        "flag": bi("flag", base["flag"]),
+        "cta": bi("cta", base["cta"]),
+
+        "nav": [(n.get("id", ""), n.get(lang, n.get("en", ""))) for n in jlist("nav_items", base["nav"])],
+
+        "hero": {
+            "eyebrow": bi("hero_eyebrow", base["hero"]["eyebrow"]),
+            "hey": bi("hero_hey", base["hero"]["hey"]),
+            "line1": bi("hero_line1", base["hero"]["line1"]),
+            "line2": bi("hero_line2", base["hero"]["line2"]),
+            "text": bi("hero_text", base["hero"]["text"]),
+            "link": bi("hero_link", base["hero"]["link"]),
+        },
+
+        "stats": [
+            (st.get(lang, ""), st.get("label_" + lang, ""))
+            for st in jlist("stats", [(n, l) for n, l in base["stats"]])
+        ],
+
+        "about": {
+            "eyebrow": bi("about_eyebrow", base["about"]["eyebrow"]),
+            "title_a": bi("about_title_a", base["about"]["title_a"]),
+            "title_b": bi("about_title_b", base["about"]["title_b"]),
+            "lead": bi("about_lead", base["about"]["lead"]),
+            "text": bi("about_text", base["about"]["text"]),
+            "cta": bi("about_cta", base["about"]["cta"]),
+        },
+
+        "experience": {
+            "eyebrow": bi("exp_eyebrow", base["experience"]["eyebrow"]),
+            "title": bi("exp_title", base["experience"]["title"]),
+        },
+        "certificates": {
+            "eyebrow": bi("cert_eyebrow", base["certificates"]["eyebrow"]),
+            "title": bi("cert_title", base["certificates"]["title"]),
+        },
+
+        "skills_title": bi("skills_title", base["skills_title"]),
+        "skills": [
+            (sk.get(lang, sk.get("en", "")), sk.get("level", 80))
+            for sk in jlist("skills", base["skills"])
+        ],
+
+        "work": {
+            "eyebrow": bi("work_eyebrow", base["work"]["eyebrow"]),
+            "title": bi("work_title", base["work"]["title"]),
+            "label": bi("work_label", base["work"]["label"]),
+        },
+
+        "projects": base["projects"],  # از مدل Project می‌آید، نه اینجا
+
+        "reviews": {
+            "eyebrow": bi("reviews_eyebrow", base["reviews"]["eyebrow"]),
+            "title": bi("reviews_title", base["reviews"]["title"]),
+            "items": [
+                {
+                    "text": r.get("text_" + lang, r.get("text_" + other_lang, "")),
+                    "name": r.get("name_" + lang, r.get("name_" + other_lang, "")),
+                    "role": r.get("role_" + lang, r.get("role_" + other_lang, "")),
+                }
+                for r in jlist("reviews", base["reviews"]["items"])
+            ],
+        },
+
+        "contact": {
+            "eyebrow": bi("contact_eyebrow", base["contact"]["eyebrow"]),
+            "title": bi("contact_title", base["contact"]["title"]),
+            "text": bi("contact_text", base["contact"]["text"]),
+            "name": bi("contact_name", base["contact"]["name"]),
+            "phone": bi("contact_phone", base["contact"]["phone"]),
+            "email": bi("contact_email", base["contact"]["email"]),
+            "project": bi("contact_project", base["contact"]["project"]),
+            "message": bi("contact_message", base["contact"]["message"]),
+            "submit": bi("contact_submit", base["contact"]["submit"]),
+            "sending": bi("contact_sending", base["contact"]["sending"]),
+            "success": bi("contact_success", base["contact"]["success"]),
+            "error": bi("contact_error", base["contact"]["error"]),
+            "project_options": jlist("project_options", base["contact"]["project_options"]),
+        },
+
+        "footer": bi("footer", base["footer"]),
+
+        "ui": {
+            "blog": bi("ui_blog", base["ui"]["blog"]),
+            "blog_eyebrow": bi("ui_blog_eyebrow", base["ui"]["blog_eyebrow"]),
+            "blog_title": bi("ui_blog_title", base["ui"]["blog_title"]),
+            "blog_text": bi("ui_blog_text", base["ui"]["blog_text"]),
+            "blog_empty": bi("ui_blog_empty", base["ui"]["blog_empty"]),
+            "read_more": bi("ui_read_more", base["ui"]["read_more"]),
+            "back_blog": bi("ui_back_blog", base["ui"]["back_blog"]),
+            "back_work": bi("ui_back_work", base["ui"]["back_work"]),
+            "visit": bi("ui_visit", base["ui"]["visit"]),
+            "overview": bi("ui_overview", base["ui"]["overview"]),
+            "more_work": bi("ui_more_work", base["ui"]["more_work"]),
+            "latest": bi("ui_latest", base["ui"]["latest"]),
+            "all_posts": bi("ui_all_posts", base["ui"]["all_posts"]),
+            "all_projects": bi("ui_all_projects", base["ui"]["all_projects"]),
+            "pdf": bi("ui_pdf", base["ui"]["pdf"]),
+        },
+    }
+    return content
